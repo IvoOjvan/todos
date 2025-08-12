@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-public class ReqisterRequest {
+public class RegisterRequest {
     @NotEmpty(message = "First name is mandatory")
     @Size(min = 3, max = 30, message = "First name must be at least 3 characters long")
     private String firstName;
@@ -18,7 +18,7 @@ public class ReqisterRequest {
     @Size(min = 8, max = 30, message = "Password must be at least 8 characters long")
     private String password;
 
-    public ReqisterRequest(String firstName, String lastName, String email, String password) {
+    public RegisterRequest(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
