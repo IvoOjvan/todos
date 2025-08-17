@@ -1,12 +1,16 @@
 package com.iso.todos.service;
 
+import com.iso.todos.entity.Authority;
 import com.iso.todos.entity.User;
 import com.iso.todos.repository.UserRepository;
+import com.iso.todos.response.UserResponse;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -17,7 +21,7 @@ public class UserServiceImpl implements UserService{
     }
     @Override
     @Transactional(readOnly = true)
-    public User getUserInfo() {
+    public UserResponse getUserInfo() {
        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
        if(authentication == null || !authentication.isAuthenticated() ||
@@ -25,6 +29,13 @@ public class UserServiceImpl implements UserService{
            throw new AccessDeniedException("Authentication required");
        }
 
-       return (User) authentication.getPrincipal();
+       User user =  (User) authentication.getPrincipal();
+
+       return new UserResponse(
+               user.getId(),
+               user.getFirstName() + " " + user.getLastName(),
+               user.getEmail(),
+               user.getAuthorities().stream().map(auth -> (Authority) auth).toList()
+       );
     }
 }
